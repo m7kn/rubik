@@ -94,23 +94,28 @@ def create_cubelet(x, y, z):
 # Create a 3x3x3 Rubik's Cube
 offset = [-1, 0, 1]
 cubelets = []
+core_entity = None
 for x in offset:
     for y in offset:
         for z in offset:
-            cubelets.append(create_cubelet(x, y, z))
+            c = create_cubelet(x, y, z)
+            if x == y == z == 0:
+                core_entity = c
+            cubelets.append(c)
 
-# Optional: Add a camera controller
-EditorCamera()
+# Add a camera controller
+e = EditorCamera()
 
-# Rotate camera
-camera.position = (-8, 4, 0)
-camera.rotation = (10, 20, 0)
-
+# Initial view rotation
+e.smoothing_helper.rotation = (20, 30, 0)
+    
 # Instructions
-instruction_text = Text(text="Use right mouse button to rotate the view.", origin=(0, 4), scale=1.5)
+text = '''
+<red>Right button:<default> rotate the view
+<red>Scrolling:<default> zoom in/out
+<red>Middle button:<default> camera moving'''
 
-def input(key):
-    if key == 'right mouse down':
-        instruction_text.enabled = False
-        
+instruction_text = Text(text=text, origin=(-0.55, 0.55), scale=1.0, position=window.top_left, line_height=1.5)
+instruction_text.create_background(padding=0.02, radius=0.01, color=color.black50)
+
 app.run()
